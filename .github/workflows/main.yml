@@ -1,0 +1,42 @@
+name: Installation of two datacenter apic
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: 'Cluster to deploy to (ocp02 or ocp52)'
+        required: true
+        default: 'ocp02'
+        type: choice
+        options:
+          - ocp02
+          - ocp52
+
+env:
+  NAMESPACE: cp4i-apic
+  HOME: ${{ github.workspace }} 
+  ENV: DEV
+  GITHUB_TOKEN: ${{ secrets.App_Repo_Secret }}
+jobs:
+  prepare-active-cluster:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up OpenShift CLI
+        uses: redhat-actions/oc-cli@v1
+        with:
+          version: '4.14'
+
+      - name: Set up Argo CD CLI
+        run: |
+          curl -sSL https://github.com/argoproj/argo-cd/releases/download/v2.11.8/argocd-linux-amd64 -o /usr/local/bin/argocd
+          chmod +x /usr/local/bin/argocd
+
+      - name: Set complete
+        run: |
+          echo "setup completed"
