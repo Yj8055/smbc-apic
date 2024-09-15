@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apic-ptl-replication-client
+  namespace: cp4i-apic
+spec:
+  commonName: apic-ptl-replication-client
+  duration: 17520h0m0s
+  issuerRef:
+    kind: Issuer
+    name: apic-ingress-issuer
+  renewBefore: 720h0m0s
+  privateKey:
+    rotationPolicy: Always
+  secretName: apic-ptl-replication-client

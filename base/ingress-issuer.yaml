@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: apic-ingress-issuer
+  namespace: cp4i-apic
+spec:
+  ca:
+    secretName: apic-ingress-ca

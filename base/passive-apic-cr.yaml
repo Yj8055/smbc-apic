@@ -1,0 +1,114 @@
+﻿apiVersion: apiconnect.ibm.com/v1beta1
+kind: APIConnectCluster
+metadata:
+  annotations:
+    apiconnect-operator/cp4i: 'true'
+    apiconnect-operator/backups-not-configured: "true"
+  labels:
+    backup.apiconnect.ibm.com/component: apiconnectcluster
+  name: smbc-apic
+  namespace: cp4i-apic
+spec:
+  license:
+    accept: true
+    license: L-DZZQ-MGVN8V
+    metric: VIRTUAL_PROCESSOR_CORE
+    use: nonproduction
+  profile: n3xc12.m56
+  version: 10.0.8.0
+  storageClassName: px-rwo-repl3-sc
+  portal:
+    encryptionSecret:
+      secretName: ptl-encryption-key
+    multiSiteHA:
+      mode: passive
+      replicationEndpoint:
+        annotations:
+          cert-manager.io/issuer: apic-ingress-issuer
+        hosts:
+        - name: ptl-replication.apps.ocp52.smbcgroup.com
+          secretName: apic-ptl-replication-server
+      replicationPeerFQDN: ptl-replication.apps.ocp02.smbcgroup.com
+      tlsClient:
+        secretName: apic-ptl-replication-client
+      portalUIEndpoint:
+        annotations:
+          cert-manager.io/issuer: ingress-issuer
+        hosts:
+          - name: portal.internal.api2-dv.smbcgroup.com
+            secretName: smbc-portal-web
+      portalAdminEndpoint:
+        annotations:
+          cert-manager.io/issuer: ingress-issuer
+        hosts:
+          - name: padmin.internal.api2-dv.smbcgroup.com
+            secretName: smbc-portal-admin
+  management:
+    encryptionSecret:
+      secretName: mgmt-encryption-key
+    multiSiteHA:
+      mode: passive
+      replicationEndpoint:
+        annotations:
+          cert-manager.io/issuer: apic-ingress-issuer
+        hosts:
+        - name: mgmt-replication.apps.ocp52.smbcgroup.com
+          secretName: smbc-apic-management-mgmt-replication-server
+      replicationPeerFQDN: mgmt-replication..apps.ocp02.smbcgroup.com
+      tlsClient:
+        secretName: apic-mgmt-replication-client
+      apiManagerEndpoint:
+        annotations:
+          cert-manager.io/issuer: api-ingress-issuer
+          haproxy.router.openshift.io/timeout: 240s
+        hosts:
+          - name: manager.api2-dv.smbcgroup.com
+            secretName: smbc-apim-endpoint
+      cloudManagerEndpoint:
+        annotations:
+          cert-manager.io/issuer: apic-ingress-issuer
+          haproxy.router.openshift.io/timeout: 240s
+        hosts:
+          - name: admin.api2-dv.smbcgroup.com
+            secretName: smbc-cm-endpoint
+      consumerAPIEndpoint:
+        annotations:
+          cert-manager.io/issuer: apic-ingress-issuer
+          haproxy.router.openshift.io/timeout: 240s
+        hosts:
+          - name: consumer.api2-dv.smbcgroup.com
+            secretName: smbc-consumer-endpoint
+      platformAPIEndpoint:
+        annotations:
+          cert-manager.io/issuer: ingress-issuer
+          haproxy.router.openshift.io/timeout: 240s
+        hosts:
+          - name: api.platform.api2-dv.smbcgroup.com
+            secretName: smbc-api-endpoint
+        consumerCatalogEndpoint:
+          annotations:
+            cert-manager.io/issuer: ingress-issuer
+            haproxy.router.openshift.io/timeout: 240s
+          hosts:
+            - name: consumer-catalog.api2-dv.smbcgroup.com
+              secretName: smbc-api-manager-consumer-catalog-endpoint
+  analytics:
+    endpoint:
+      annotations:
+        cert-manager.io/issuer: ingress-issuer
+      hosts:
+        - name: ai.apps.ocp52.smbcgroup.com
+          secretName: smbc-analytics-ai-endpoint
+  gateway:
+    gatewayEndpoint:
+      annotations:
+        cert-manager.io/issuer: ingress-issuer
+      hosts:
+        - name: api-gw.apps.ocp52.smbcgroup.com
+          secretName: smbc-gwv6-endpoint
+    gatewayManagerEndpoint:
+      annotations:
+        cert-manager.io/issuer: ingress-issuer
+      hosts:
+        - name: gw-manager.apps.ocp52.smbcgroup.com
+          secretName: smbc-gwv6-manager-endpoint

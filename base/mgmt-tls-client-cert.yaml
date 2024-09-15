@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apic-mgmt-replication-client
+  namespace: cp4i-apic
+spec:
+  commonName: apic-mgmt-replication-client
+  duration: 17520h0m0s
+  issuerRef:
+    kind: Issuer
+    name: apic-ingress-issuer
+  renewBefore: 720h0m0s
+  privateKey:
+    rotationPolicy: Always
+  secretName: apic-mgmt-replication-client
+
