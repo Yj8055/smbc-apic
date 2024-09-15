@@ -59,7 +59,7 @@ jobs:
       
       - name: Connect to ocp02 cluster
         run: |
-          oc login --token=sha256~QQsexSzJKrEmK1la4m2HjTE-MFn6wRzoqDIG9f-aEgc --server=https://api.o1-791284.cp.fyre.ibm.com:6443
+          oc login --token=sha256~QQsexSzJKrEmK1la4m2HjTE-MFn6wRzoqDIG9f-aEgc --server=https://api.o1-791284.cp.fyre.ibm.com:6443 --insecure-skip-tls-verify
 
       - name: Connect to Argo CD on ocp02
         run: |
