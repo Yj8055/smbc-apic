@@ -52,3 +52,7 @@ jobs:
       - name: Set complete
         run: |
           echo "setup completed"
+          echo "oc"
+          oc
+          echo "argocd"
+          argocd
