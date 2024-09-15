@@ -69,6 +69,9 @@ jobs:
       - name: create platform navigator
         run: |
           echo "Creating platform navigator"
+          if oc get platformnavigator "platform-navigator-apic" -n "$NAMESPACE" &> /dev/null; then
+              echo "PN exists in namespace"
+          else
           argocd app sync epic-install --resource "*:PlatformNavigator:platform-navigator-apic"
           
         
@@ -93,3 +96,98 @@ jobs:
 
           # If the component is still not ready after MAX_RETRIES, output failure
           echo "The component platform-navigator-apic failed to become ready after multiple retries."
+          fi
+
+      - name: create mgmt-encryption-key  
+        run: |
+          echo "Creating management encryption key secret"
+          if oc get secret "mgmt-encryption-key" -n "$NAMESPACE" &> /dev/null; then
+              echo "Secret exists in namespace"
+          else
+              echo "Secret does not exist in namespace, creating new secret"
+              argocd app sync epic-install --resource *:Secret:mgmt-encryption-key
+          fi
+          
+      - name: create ptl-encryption-key
+        run: |
+          echo "Creating portal encryption key secret"
+          if oc get secret "ptl-encryption-key" -n "$NAMESPACE" &> /dev/null; then
+              echo "Secret exists in namespace"
+          else
+              echo "Secret does not exist in namespace, creating new secret"
+              argocd app sync epic-install --resource *:Secret:ptl-encryption-key
+          fi
+
+      - name: create self-signed issuer 
+        run: |
+          echo "Creating self-signed issuer"
+          if oc get issuer "apic-self-signed" -n "$NAMESPACE" &> /dev/null; then
+              echo "issuer exists in namespace"
+          else
+              echo "issuer does not exist in namespace, creating new issuer"
+              argocd app sync epic-install --resource *:Issuer:apic-self-signed
+          fi
+
+      - name: create ingress-ca certificate
+        run: |
+          echo "Creating ingress-ca certificate"
+          if oc get certificate "apic-ingress-ca" -n "$NAMESPACE" &> /dev/null; then
+              echo "Certificate exists in namespace"
+          else
+              echo "Certificate does not exist in namespace, creating new certificate"
+              argocd app sync epic-install --resource *:Certificate:apic-ingress-ca
+          fi
+
+      - name: create ingress issuer
+        run: |
+          echo "Creating ingress issuer"
+          if oc get issuer "apic-ingress-issuer" -n "$NAMESPACE" &> /dev/null; then
+              echo "Issuer exists in namespace"
+          else
+              echo "Issuer  does not exist in namespace, creating new Issuer"
+              argocd app sync epic-install --resource *:Issuer:apic-ingress-issuer
+          fi
+
+      - name: create TLS client replication certificate for management 
+        run: |
+          echo "Creating apic-mgmt-replication-client certificate"
+          if oc get certificate "apic-mgmt-replication-client" -n "$NAMESPACE" &> /dev/null; then
+              echo "Certificate exists in namespace"
+          else
+              echo "Certificate does not exist in namespace, creating new certificate"
+              argocd app sync epic-install --resource *:Certificate:apic-mgmt-replication-client
+          fi
+      
+      - name: create TLS client replication certificate for portal 
+        run: |
+          echo "Creating apic-ptl-replication-client certificate"
+          if oc get certificate "apic-ptl-replication-client" -n "$NAMESPACE" &> /dev/null; then
+              echo "Certificate exists in namespace"
+          else
+              echo "Certificate does not exist in namespace, creating new certificate"
+              argocd app sync epic-install --resource *:Certificate:apic-ptl-replication-client
+          fi
+
+      - name: Export ingress-ca issuer secret
+        run: |
+          echo "Exporting ingress-ca issuer secret"
+          if oc get secret "apic-ingress-ca" -n "$NAMESPACE" &> /dev/null; then
+              echo "Secret exists in namespace"
+              oc get secret apic-ingress-ca -o yaml -n cp4i-apic  > ${{ github.workspace }}/ca-issuer-secret.yaml
+          else
+              echo "secret does not exist in namespace, creating new secret"
+              argocd app sync epic-install --resource *:Certificate:apic-ingress-ca
+              oc get secret apic-ingress-ca -o yaml -n cp4i-apic  > ${{ github.workspace }}/ca-issuer-secret.yaml
+          fi
+          
+      - name: Upload ingress-ca issuer secret as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ingress-ca-issuer-secret
+          path: ${{ github.workspace }}/ca-issuer-secret.yaml
+      
+      - name: validate resources
+        run: |
+          oc get secrets -n cp4i-apic | grep apic
+          oc get certs -n cp4i-apic | grep apic
+          oc get issuer -n cp4i-apic | grep apic
