@@ -22,40 +22,40 @@ env:
   GITHUB_TOKEN: ${{ secrets.App_Repo_Secret }}
 jobs:
   prepare-active-cluster:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install oc CLI
-        run: |
-          # Define the version of oc CLI you want to install
-          OC_VERSION="4.14.0" # Change this to the desired version
+      # - name: Install oc CLI
+      #   run: |
+      #     # Define the version of oc CLI you want to install
+      #     OC_VERSION="4.14.0" # Change this to the desired version
           
-          # Download the oc CLI binary
-          wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz
+      #     # Download the oc CLI binary
+      #     wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz
   
-          # Extract the tarball
-          tar xvf openshift-client-linux-${OC_VERSION}.tar.gz
+      #     # Extract the tarball
+      #     tar xvf openshift-client-linux-${OC_VERSION}.tar.gz
   
-          # Move oc binary to /usr/local/bin
-          sudo mv oc /usr/local/bin/
+      #     # Move oc binary to /usr/local/bin
+      #     sudo mv oc /usr/local/bin/
   
-          # Verify the installation
-          oc version
+      #     # Verify the installation
+      #     oc version
 
-      - name: Set up Argo CD CLI
-        run: |
-          curl -sSL https://github.com/argoproj/argo-cd/releases/download/v2.11.8/argocd-linux-amd64 -o /usr/local/bin/argocd
-          chmod +x /usr/local/bin/argocd
+      # - name: Set up Argo CD CLI
+      #   run: |
+      #     curl -sSL https://github.com/argoproj/argo-cd/releases/download/v2.11.8/argocd-linux-amd64 -o /usr/local/bin/argocd
+      #     chmod +x /usr/local/bin/argocd
 
-      - name: Set complete
-        run: |
-          echo "setup completed"
-          echo "oc"
-          oc
-          echo "argocd"
-          argocd
+      # - name: Set complete
+      #   run: |
+      #     echo "setup completed"
+      #     echo "oc"
+      #     oc
+      #     echo "argocd"
+      #     argocd
       
       - name: Connect to ocp02 cluster
         run: |
