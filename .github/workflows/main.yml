@@ -69,27 +69,27 @@ jobs:
       - name: create platform navigator
         run: |
           echo "Creating platform navigator"
-          argocd app sync epic-install --resource :PlatformNavigator:platform-navigator-apic 
+          argocd app sync epic-install --resource "*:PlatformNavigator:platform-navigator-apic"
           
         
 
-          check_component_status() {
-              oc get platformnavigator -n "cp4i-apic" -o jsonpath="{.items[?(@.metadata.name=='platform-navigator-apic')].status.conditions[?(@.type=='Ready')].status}" | grep -q "True"
-          }
+          # check_component_status() {
+          #     oc get platformnavigator -n "cp4i-apic" -o jsonpath="{.items[?(@.metadata.name=='platform-navigator-apic')].status.conditions[?(@.type=='Ready')].status}" | grep -q "True"
+          # }
 
-          # Number of retries
-          MAX_RETRIES=3
+          # # Number of retries
+          # MAX_RETRIES=3
 
-          # Check the status up to MAX_RETRIES times
-          for ((i=1; i<=MAX_RETRIES; i++)); do
-              if check_component_status; then
-                  echo "The component platform-navigator-apic is ready."
-                  exit 0
-              else
-                  echo "The component platform-navigator-apic is not ready. Retrying in 5 minutes..."
-                  sleep 300  # Sleep for 5 minutes
-              fi
-          done
+          # # Check the status up to MAX_RETRIES times
+          # for ((i=1; i<=MAX_RETRIES; i++)); do
+          #     if check_component_status; then
+          #         echo "The component platform-navigator-apic is ready."
+          #         exit 0
+          #     else
+          #         echo "The component platform-navigator-apic is not ready. Retrying in 5 minutes..."
+          #         sleep 300  # Sleep for 5 minutes
+          #     fi
+          # done
 
-          # If the component is still not ready after MAX_RETRIES, output failure
-          echo "The component platform-navigator-apic failed to become ready after multiple retries."
+          # # If the component is still not ready after MAX_RETRIES, output failure
+          # echo "The component platform-navigator-apic failed to become ready after multiple retries."
