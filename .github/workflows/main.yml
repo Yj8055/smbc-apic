@@ -191,3 +191,13 @@ jobs:
           oc get secrets -n cp4i-apic | grep apic
           oc get certs -n cp4i-apic | grep apic
           oc get issuer -n cp4i-apic | grep apic
+
+      - name: create active apiconnect cluster
+        run: |
+          echo "Creating active apic"
+          if oc get apic "smbc-apic" -n "$NAMESPACE" &> /dev/null; then
+              echo "api connect cluster exists"
+          else
+              echo "api connect cluster not exists, creating new active cluster"
+              argocd app sync apic-install --resource *:APIConnectCluster:smbc-apic
+          fi
