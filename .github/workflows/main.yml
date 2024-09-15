@@ -27,22 +27,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up OpenShift CLI
+      - name: Install oc CLI
         run: |
-        # Define the version of oc CLI you want to install
-        OC_VERSION="4.14.0" # Change this to the desired version
-        
-        # Download the oc CLI binary
-        wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz
-
-        # Extract the tarball
-        tar xvf openshift-client-linux-${OC_VERSION}.tar.gz
-
-        # Move oc binary to /usr/local/bin
-        sudo mv oc /usr/local/bin/
-
-        # Verify the installation
-        oc version
+          # Define the version of oc CLI you want to install
+          OC_VERSION="4.12.0" # Change this to the desired version
+          
+          # Download the oc CLI binary
+          wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz
+  
+          # Extract the tarball
+          tar xvf openshift-client-linux-${OC_VERSION}.tar.gz
+  
+          # Move oc binary to /usr/local/bin
+          sudo mv oc /usr/local/bin/
+  
+          # Verify the installation
+          oc version
 
       - name: Set up Argo CD CLI
         run: |
