@@ -64,7 +64,7 @@ jobs:
 
       - name: Connect to Argo CD on ocp02
         run: |
-          argocd login argocd-sample-server-cp4i-apic.apps.o1-791284.cp.fyre.ibm.com --username admin --password VlqPvHdRApBwhCnkiaUG8fo261juT5rL -y
+          argocd login argocd-sample-server-cp4i-apic.apps.o1-791284.cp.fyre.ibm.com --username admin --password VlqPvHdRApBwhCnkiaUG8fo261juT5rL --insecure
 
       - name: create platform navigator
         run: |
