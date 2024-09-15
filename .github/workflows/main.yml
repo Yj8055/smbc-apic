@@ -69,7 +69,10 @@ jobs:
       - name: create platform navigator
         run: |
           echo "Creating platform navigator"
-          argocd app sync apic-install --resource=PlatformNavigator:platform-navigator-apic
+          argocd app sync epic-install --resource :PlatformNavigator:platform-navigator-apic 
+          
+        
+
           check_component_status() {
               oc get platformnavigator -n "cp4i-apic" -o jsonpath="{.items[?(@.metadata.name=='platform-navigator-apic')].status.conditions[?(@.type=='Ready')].status}" | grep -q "True"
           }
