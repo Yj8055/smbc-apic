@@ -30,7 +30,7 @@ jobs:
       - name: Set up OpenShift CLI
         run: |
         # Define the version of oc CLI you want to install
-        OC_VERSION="4.12.0" # Change this to the desired version
+        OC_VERSION="4.14.0" # Change this to the desired version
         
         # Download the oc CLI binary
         wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz
