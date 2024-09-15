@@ -105,7 +105,7 @@ jobs:
               echo "Secret exists in namespace"
           else
               echo "Secret does not exist in namespace, creating new secret"
-              argocd app sync epic-install --resource *:Secret:mgmt-encryption-key
+              argocd app sync epic-install --resource "*:Secret:mgmt-encryption-key"
           fi
           
       - name: create ptl-encryption-key
@@ -115,7 +115,7 @@ jobs:
               echo "Secret exists in namespace"
           else
               echo "Secret does not exist in namespace, creating new secret"
-              argocd app sync epic-install --resource *:Secret:ptl-encryption-key
+              argocd app sync epic-install --resource "*:Secret:ptl-encryption-key"
           fi
 
       - name: create self-signed issuer 
@@ -125,7 +125,7 @@ jobs:
               echo "issuer exists in namespace"
           else
               echo "issuer does not exist in namespace, creating new issuer"
-              argocd app sync epic-install --resource *:Issuer:apic-self-signed
+              argocd app sync epic-install --resource "*:Issuer:apic-self-signed"
           fi
 
       - name: create ingress-ca certificate
@@ -135,7 +135,7 @@ jobs:
               echo "Certificate exists in namespace"
           else
               echo "Certificate does not exist in namespace, creating new certificate"
-              argocd app sync epic-install --resource *:Certificate:apic-ingress-ca
+              argocd app sync epic-install --resource "*:Certificate:apic-ingress-ca"
           fi
 
       - name: create ingress issuer
@@ -145,7 +145,7 @@ jobs:
               echo "Issuer exists in namespace"
           else
               echo "Issuer  does not exist in namespace, creating new Issuer"
-              argocd app sync epic-install --resource *:Issuer:apic-ingress-issuer
+              argocd app sync epic-install --resource "*:Issuer:apic-ingress-issuer"
           fi
 
       - name: create TLS client replication certificate for management 
@@ -155,7 +155,7 @@ jobs:
               echo "Certificate exists in namespace"
           else
               echo "Certificate does not exist in namespace, creating new certificate"
-              argocd app sync epic-install --resource *:Certificate:apic-mgmt-replication-client
+              argocd app sync epic-install --resource "*:Certificate:apic-mgmt-replication-client"
           fi
       
       - name: create TLS client replication certificate for portal 
@@ -165,7 +165,7 @@ jobs:
               echo "Certificate exists in namespace"
           else
               echo "Certificate does not exist in namespace, creating new certificate"
-              argocd app sync epic-install --resource *:Certificate:apic-ptl-replication-client
+              argocd app sync epic-install --resource "*:Certificate:apic-ptl-replication-client"
           fi
 
       - name: Export ingress-ca issuer secret
@@ -176,7 +176,7 @@ jobs:
               oc get secret apic-ingress-ca -o yaml -n cp4i-apic  > ${{ github.workspace }}/ca-issuer-secret.yaml
           else
               echo "secret does not exist in namespace, creating new secret"
-              argocd app sync epic-install --resource *:Certificate:apic-ingress-ca
+              argocd app sync epic-install --resource "*:Certificate:apic-ingress-ca"
               oc get secret apic-ingress-ca -o yaml -n cp4i-apic  > ${{ github.workspace }}/ca-issuer-secret.yaml
           fi
           
@@ -199,5 +199,5 @@ jobs:
               echo "api connect cluster exists"
           else
               echo "api connect cluster not exists, creating new active cluster"
-              argocd app sync apic-install --resource *:APIConnectCluster:smbc-apic
+              argocd app sync apic-install --resource "*:APIConnectCluster:smbc-apic"
           fi
