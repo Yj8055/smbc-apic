@@ -199,5 +199,5 @@ jobs:
               echo "api connect cluster exists"
           else
               echo "api connect cluster not exists, creating new active cluster"
-              argocd app sync apic-install --resource "*:APIConnectCluster:smbc-apic"
+              argocd app sync epic-install --resource "*:APIConnectCluster:smbc-apic"
           fi
