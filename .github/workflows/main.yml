@@ -73,7 +73,6 @@ jobs:
               echo "PN exists in namespace"
           else
           argocd app sync epic-install --resource "*:PlatformNavigator:platform-navigator-apic"
-          
         
 
           check_component_status() {
@@ -201,4 +200,3 @@ jobs:
               echo "api connect cluster not exists, creating new active cluster"
               argocd app sync epic-install --resource "*:APIConnectCluster:smbc-apic"
           fi
-          
