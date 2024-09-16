@@ -194,9 +194,9 @@ jobs:
       - name: create active apiconnect cluster
         run: |
           echo "Creating active apic"
-          if oc get apic "smbc-apic" -n "$NAMESPACE" &> /dev/null; then
+          if oc get apic "smbc-apic1" -n "$NAMESPACE" &> /dev/null; then
               echo "api connect cluster exists"
           else
               echo "api connect cluster not exists, creating new active cluster"
-              argocd app sync epic-install --resource "*:APIConnectCluster:smbc-apic"
+              argocd app sync epic-install --resource "*:APIConnectCluster:smbc-apic1"
           fi
